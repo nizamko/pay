@@ -6,6 +6,7 @@
   function init() {
     window.I18n.init();
     window.UI.init();
+    if (window.Calculator) window.Calculator.init();
   }
 
   if (document.readyState === 'loading') {

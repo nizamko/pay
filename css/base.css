@@ -9,6 +9,11 @@ html{
   scroll-padding-top:96px;
 }
 
+:root[data-font="sm"]{--font-base:15px;}
+:root[data-font="md"]{--font-base:17px;}
+:root[data-font="lg"]{--font-base:19px;}
+:root[data-font="xl"]{--font-base:21px;}
+
 body{
   font-family:var(--font-family);
   font-size:var(--font-base);

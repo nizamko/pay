@@ -1,0 +1,159 @@
+/* ===== Interactive fee calculator ===== */
+.fee-calc{
+  margin:22px 0;
+  background:linear-gradient(165deg,var(--stat-grad-1),var(--stat-grad-2));
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:22px 24px;
+}
+
+.fee-calc__title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:1.06rem;
+  color:var(--heading);
+  margin-bottom:6px;
+}
+
+.fee-calc__title svg{
+  width:22px;height:22px;
+  color:var(--gold-500);
+  flex-shrink:0;
+}
+
+.fee-calc__desc{
+  font-size:.9rem;
+  color:var(--ink-600);
+  margin-bottom:16px;
+  line-height:1.8;
+}
+
+.fee-calc__form{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:12px;
+  margin-bottom:8px;
+}
+
+.fee-calc__label{
+  font-size:.9rem;
+  font-weight:700;
+  color:var(--heading);
+}
+
+.fee-calc__input{
+  flex:1;
+  min-width:160px;
+  max-width:260px;
+  padding:10px 14px;
+  font-size:1rem;
+  font-family:inherit;
+  color:var(--ink-900);
+  background:var(--surface);
+  border:1px solid var(--border-strong);
+  border-radius:var(--radius-md);
+  transition:border-color .2s ease, box-shadow .2s ease;
+}
+
+.fee-calc__input:focus{
+  outline:none;
+  border-color:var(--gold-500);
+  box-shadow:0 0 0 3px rgba(232,163,61,.18);
+}
+
+.fee-calc__btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 20px;
+  font-size:.92rem;
+  font-weight:700;
+  color:#fff;
+  background:linear-gradient(135deg,var(--navy-700),var(--navy-600));
+  border:none;
+  border-radius:var(--radius-md);
+  cursor:pointer;
+  transition:transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+.fee-calc__btn:hover{
+  transform:translateY(-1px);
+  box-shadow:var(--shadow-md);
+  filter:brightness(1.05);
+}
+
+.fee-calc__btn svg{width:16px;height:16px;}
+
+.fee-calc__error{
+  display:none;
+  font-size:.86rem;
+  color:var(--red-500);
+  margin:6px 0 0;
+}
+
+.fee-calc__error.is-visible{display:block;}
+
+.fee-calc__results{
+  display:none;
+  margin:16px 0 0;
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  overflow:hidden;
+  background:var(--surface);
+}
+
+.fee-calc__results.is-visible{display:block;}
+
+.fee-calc__row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:10px 16px;
+  border-bottom:1px solid var(--border);
+}
+
+.fee-calc__row:last-child{border-bottom:none;}
+
+.fee-calc__row:nth-child(even){background:var(--row-alt);}
+
+.fee-calc__row dt{
+  font-size:.9rem;
+  color:var(--ink-600);
+}
+
+.fee-calc__row dd{
+  font-size:.96rem;
+  font-weight:700;
+  color:var(--heading);
+  text-align:end;
+  white-space:nowrap;
+}
+
+.fee-calc__row--net{
+  background:linear-gradient(90deg,rgba(232,163,61,.16),rgba(232,163,61,.05)) !important;
+}
+
+.fee-calc__row--net dt{
+  color:var(--gold-600);
+  font-weight:700;
+}
+
+.fee-calc__row--net dd{
+  color:var(--gold-600);
+  font-size:1.05rem;
+}
+
+.fee-calc__note{
+  font-size:.8rem;
+  color:var(--ink-400);
+  margin:10px 0 0;
+  line-height:1.7;
+}
+
+@media (max-width:520px){
+  .fee-calc__input{max-width:none;flex-basis:100%;}
+  .fee-calc__form{flex-direction:column;align-items:stretch;}
+}

@@ -9,6 +9,8 @@
   .topbar,
   .toolbar,
   .search-overlay,
+  .shortcuts-overlay,
+  .share-pop,
   .toc-toggle,
   .sidebar{display:none !important;}
 

@@ -2,6 +2,8 @@
   'use strict';
 
   var THEME_KEY = 'escrow-theme';
+  var FONT_KEY = 'escrow-font';
+  var FONT_STEPS = ['sm', 'md', 'lg', 'xl'];
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var progressBar = document.getElementById('readingProgress');
   var themeBtn = document.getElementById('themeBtn');
@@ -93,6 +95,64 @@
 
   window.addEventListener('scroll', onScroll, { passive: true });
 
+  /* ===== Font size control ===== */
+  function initFontSize() {
+    var saved = null;
+    try { saved = localStorage.getItem(FONT_KEY); } catch (e) {}
+    var size = saved || 'md';
+    if (FONT_STEPS.indexOf(size) === -1) size = 'md';
+    document.documentElement.setAttribute('data-font', size);
+  }
+
+  function stepFont(dir) {
+    var current = document.documentElement.getAttribute('data-font') || 'md';
+    var idx = FONT_STEPS.indexOf(current);
+    if (idx === -1) idx = 1;
+    var next = Math.min(FONT_STEPS.length - 1, Math.max(0, idx + dir));
+    document.documentElement.setAttribute('data-font', FONT_STEPS[next]);
+    try { localStorage.setItem(FONT_KEY, FONT_STEPS[next]); } catch (e) {}
+  }
+
+  function resetFont() {
+    document.documentElement.setAttribute('data-font', 'md');
+    try { localStorage.setItem(FONT_KEY, 'md'); } catch (e) {}
+  }
+
+  var fontDec = document.getElementById('fontDec');
+  var fontInc = document.getElementById('fontInc');
+  var fontReset = document.getElementById('fontReset');
+  if (fontDec) fontDec.addEventListener('click', function () { stepFont(-1); });
+  if (fontInc) fontInc.addEventListener('click', function () { stepFont(1); });
+  if (fontReset) fontReset.addEventListener('click', resetFont);
+
+  document.addEventListener('i18n:changed', function () {
+    renderReadingTime();
+  });
+
+  /* ===== Reading time estimate ===== */
+  function computeReadingTime() {
+    var content = document.querySelector('.content');
+    if (!content) return null;
+    var text = content.innerText || content.textContent || '';
+    text = text.replace(/\s+/g, ' ').trim();
+    var wordCount = text ? text.split(' ').length : 0;
+    var wpm = 220;
+    var minutes = Math.max(1, Math.round(wordCount / wpm));
+    return { words: wordCount, minutes: minutes };
+  }
+
+  function renderReadingTime() {
+    var badge = document.getElementById('readTimeBadge');
+    if (!badge) return;
+    var info = computeReadingTime();
+    if (!info) return;
+    var isAr = document.documentElement.getAttribute('lang') === 'ar';
+    var value = badge.querySelector('#readTimeValue');
+    var unit = badge.querySelector('#readTimeUnit');
+    if (value) value.textContent = String(info.minutes);
+    if (unit) unit.textContent = isAr ? '\u062f\u0642\u0627\u0626\u0642' : window.I18n.translate('readtime.min');
+  }
+
   function initReveal() {
     var targets = document.querySelectorAll('.section');
     if (prefersReducedMotion) {
@@ -117,9 +177,11 @@
   window.UI = {
     init: function () {
       initTheme();
+      initFontSize();
       initReveal();
       onScroll();
       scrollSpy();
+      renderReadingTime();
     },
     flashSection: function (id) {
       var section = document.getElementById(id);
@@ -129,6 +191,9 @@
       section.classList.remove('is-highlighted');
       void section.offsetWidth;
       section.classList.add('is-highlighted');
-    }
+    },
+    stepFont: stepFont,
+    resetFont: resetFont,
+    renderReadingTime: renderReadingTime
   };
 })();

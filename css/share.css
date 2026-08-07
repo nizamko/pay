@@ -1,0 +1,221 @@
+/* ===== Share popover ===== */
+.share-pop{
+  position:fixed;
+  bottom:180px;
+  inset-inline-start:26px;
+  z-index:950;
+  width:240px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);
+  padding:16px;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(12px);
+  transition:opacity .22s ease, transform .22s ease, visibility .22s ease;
+}
+
+.share-pop.is-open{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
+}
+
+.share-pop__title{
+  font-size:.9rem;
+  font-weight:700;
+  color:var(--heading);
+  margin-bottom:12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.share-pop__title svg{width:17px;height:17px;color:var(--gold-500);}
+
+.share-pop__list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.share-pop__btn{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  padding:10px 12px;
+  font-size:.88rem;
+  font-weight:600;
+  color:var(--ink-700);
+  background:var(--surface-soft);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  cursor:pointer;
+  transition:background .2s ease, border-color .2s ease, color .2s ease;
+}
+
+.share-pop__btn:hover{
+  background:var(--navy-100);
+  border-color:color-mix(in srgb, var(--navy-500) 30%, transparent);
+  color:var(--heading);
+}
+
+.share-pop__btn svg{width:18px;height:18px;flex-shrink:0;}
+
+.share-pop__btn--wa svg{color:#25D366;}
+.share-pop__btn--copy svg{color:var(--navy-500);}
+.share-pop__btn--md svg{color:var(--gold-600);}
+
+.share-pop__copied{
+  margin:10px 0 0;
+  font-size:.82rem;
+  color:var(--green-600);
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .2s ease, visibility .2s ease;
+}
+
+.share-pop__copied.is-visible{opacity:1;visibility:visible;}
+
+/* ===== Font size controls ===== */
+.font-controls{
+  position:fixed;
+  bottom:26px;
+  inset-inline-start:26px;
+  z-index:900;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.font-controls .toolbar__btn svg{width:18px;height:18px;}
+
+/* ===== Keyboard shortcuts overlay ===== */
+.shortcuts-overlay{
+  position:fixed;
+  inset:0;
+  z-index:1200;
+  background:rgba(6,15,30,.55);
+  backdrop-filter:blur(3px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .2s ease, visibility .2s ease;
+}
+
+.shortcuts-overlay.is-open{
+  opacity:1;
+  visibility:visible;
+}
+
+.shortcuts-box{
+  width:100%;
+  max-width:560px;
+  max-height:82vh;
+  overflow:auto;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-xl);
+  box-shadow:var(--shadow-lg);
+  padding:22px 26px;
+}
+
+.shortcuts-box__head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.shortcuts-box__head h3{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0;
+  font-size:1.05rem;
+  color:var(--heading);
+}
+
+.shortcuts-box__head h3 svg{width:20px;height:20px;color:var(--gold-500);}
+
+.shortcuts-close{
+  width:34px;height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--surface-soft);
+  color:var(--ink-600);
+  cursor:pointer;
+  transition:background .2s ease, color .2s ease;
+}
+
+.shortcuts-close:hover{background:var(--navy-100);color:var(--heading);}
+
+.shortcuts-close svg{width:16px;height:16px;}
+
+.shortcuts-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:6px 26px;
+}
+
+.shortcuts-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:7px 2px;
+  border-bottom:1px dashed var(--border);
+  font-size:.9rem;
+  color:var(--ink-600);
+}
+
+.shortcuts-item:last-child{border-bottom:none;}
+
+.shortcuts-keys{
+  display:flex;
+  gap:5px;
+  flex-shrink:0;
+}
+
+.shortcuts-keys kbd{
+  font-family:inherit;
+  font-size:.78rem;
+  font-weight:700;
+  color:var(--heading);
+  background:var(--surface-soft-2);
+  border:1px solid var(--border-strong);
+  border-bottom-width:2px;
+  border-radius:6px;
+  padding:2px 8px;
+  min-width:26px;
+  text-align:center;
+}
+
+/* ===== Reading time badge ===== */
+.readtime-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.22);
+  padding:6px 14px;
+  border-radius:999px;
+  font-size:.8rem;
+  color:#f5ead3;
+  margin-top:16px;
+}
+
+.readtime-badge svg{width:15px;height:15px;color:var(--gold-400);}
+
+@media (max-width:520px){
+  .shortcuts-box{padding:18px 16px;}
+}
