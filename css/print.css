@@ -1,0 +1,93 @@
+@page{
+  size:A4;
+  margin:16mm 14mm 18mm;
+}
+
+@media print{
+
+  .progress-bar,
+  .topbar,
+  .toolbar,
+  .search-overlay,
+  .toc-toggle,
+  .sidebar{display:none !important;}
+
+  html,body{
+    background:#fff !important;
+    color:#0F1B2D !important;
+    font-size:11pt;
+    line-height:1.65;
+  }
+
+  .layout{
+    display:block;
+    max-width:100%;
+    padding:0;
+  }
+
+  .hero{
+    background:var(--navy-900) !important;
+    color:#fff !important;
+    padding:22px 0 20px;
+    border-radius:8px;
+    print-color-adjust:exact;
+    -webkit-print-color-adjust:exact;
+    page-break-after:avoid;
+  }
+
+  .hero::before{display:none;}
+
+  .hero h1{font-size:19pt;}
+  .hero__subtitle{font-size:12pt;}
+  .hero__desc{font-size:9.5pt;}
+  .hero__badge{font-size:8pt;padding:3px 12px;}
+
+  .section{
+    opacity:1 !important;
+    transform:none !important;
+    background:#fff !important;
+    border:1px solid #dfe6ee;
+    border-radius:8px;
+    box-shadow:none !important;
+    padding:18px 20px;
+    margin-bottom:14px;
+    page-break-inside:avoid;
+  }
+
+  html.js .section,
+  html.js .step{
+    opacity:1 !important;
+    transform:none !important;
+  }
+
+  .section.is-visible{opacity:1;}
+
+  .section__num{
+    width:30px;height:30px;
+    font-size:.8rem;
+    border-radius:8px;
+    print-color-adjust:exact;
+    -webkit-print-color-adjust:exact;
+  }
+
+  .section__head h2{font-size:14pt;}
+
+  .callout{border-radius:8px;page-break-inside:avoid;}
+  .table-wrap{border-radius:8px;page-break-inside:avoid;}
+  th{background:var(--navy-800) !important;print-color-adjust:exact;-webkit-print-color-adjust:exact;}
+
+  .step{page-break-inside:avoid;}
+  .step__num{print-color-adjust:exact;-webkit-print-color-adjust:exact;}
+
+  .stats-grid,.cards-grid{gap:8px;}
+  .stat,.card{background:#f7fafd !important;border-radius:8px;}
+
+  .site-footer{
+    background:#fff !important;
+    border-top:1px solid #dfe6ee;
+    page-break-inside:avoid;
+  }
+
+  .section a::after{content:" (" attr(href) ")";font-size:.8em;color:var(--ink-400);}
+  .toc__list a::after{display:none;}
+}
