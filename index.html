@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دراسة جدوى مشروع: منصة وسيط ضمان للمدفوعات (Escrow) في مصر</title>
+<style>
+  :root{
+    --primary:#0d3b66;
+    --primary-light:#1a5a9e;
+    --accent:#f4a259;
+    --green:#2a9d8f;
+    --red:#e63946;
+    --bg:#f6f8fb;
+    --card:#ffffff;
+    --text:#1e2a38;
+    --muted:#5b6b7c;
+    --border:#dfe6ee;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.9;
+  }
+  .container{max-width:1000px;margin:0 auto;padding:24px 18px;}
+
+  /* ===== Header ===== */
+  header{
+    background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);
+    color:#fff;
+    padding:56px 24px 48px;
+    text-align:center;
+    border-radius:0 0 28px 28px;
+  }
+  header .badge{
+    display:inline-block;background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.35);
+    padding:6px 18px;border-radius:999px;font-size:.85rem;margin-bottom:16px;
+  }
+  header h1{font-size:2rem;margin-bottom:10px;line-height:1.5;}
+  header p{opacity:.9;max-width:640px;margin:0 auto;font-size:1.02rem;}
+  header .meta{margin-top:22px;font-size:.85rem;opacity:.75;}
+
+  /* ===== TOC ===== */
+  nav.toc{
+    background:var(--card);border:1px solid var(--border);border-radius:16px;
+    padding:22px 26px;margin:28px 0;
+  }
+  nav.toc h2{font-size:1.1rem;color:var(--primary);margin-bottom:12px;}
+  nav.toc ol{columns:2;column-gap:40px;padding-right:20px;}
+  nav.toc li{margin:6px 0;font-size:.95rem;}
+  nav.toc a{color:var(--primary-light);text-decoration:none;}
+  nav.toc a:hover{text-decoration:underline;}
+  @media(max-width:640px){nav.toc ol{columns:1;}}
+
+  /* ===== Sections ===== */
+  section{
+    background:var(--card);border:1px solid var(--border);border-radius:16px;
+    padding:30px 28px;margin-bottom:26px;
+  }
+  section h2{
+    color:var(--primary);font-size:1.35rem;margin-bottom:6px;
+    padding-bottom:10px;border-bottom:3px solid var(--accent);display:inline-block;
+  }
+  section h3{color:var(--primary-light);font-size:1.08rem;margin:22px 0 8px;}
+  section p{margin:10px 0;}
+  ul,ol{padding-right:22px;margin:8px 0;}
+  li{margin:6px 0;}
+
+  .callout{
+    border-radius:12px;padding:16px 20px;margin:16px 0;font-size:.97rem;
+  }
+  .callout.info{background:#e8f2fc;border-right:5px solid var(--primary-light);}
+  .callout.warn{background:#fff4e5;border-right:5px solid var(--accent);}
+  .callout.danger{background:#fdeaea;border-right:5px solid var(--red);}
+  .callout.success{background:#e7f6f4;border-right:5px solid var(--green);}
+  .callout strong{display:block;margin-bottom:4px;}
+
+  /* ===== Tables ===== */
+  .table-wrap{overflow-x:auto;margin:16px 0;border-radius:12px;border:1px solid var(--border);}
+  table{width:100%;border-collapse:collapse;font-size:.92rem;background:#fff;}
+  th{
+    background:var(--primary);color:#fff;padding:11px 14px;text-align:right;
+    font-weight:600;white-space:nowrap;
+  }
+  td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;}
+  tr:nth-child(even) td{background:#f7fafd;}
+  tr:last-child td{border-bottom:none;}
+
+  /* ===== Flow steps ===== */
+  .flow{display:flex;flex-direction:column;gap:0;margin:18px 0;}
+  .step{
+    display:flex;gap:16px;align-items:flex-start;position:relative;
+    padding-bottom:22px;
+  }
+  .step::before{
+    content:"";position:absolute;right:19px;top:42px;bottom:0;
+    width:2px;background:var(--border);
+  }
+  .step:last-child::before{display:none;}
+  .step .num{
+    flex-shrink:0;width:40px;height:40px;border-radius:50%;
+    background:var(--primary);color:#fff;display:flex;align-items:center;
+    justify-content:center;font-weight:700;font-size:1rem;z-index:1;
+  }
+  .step .body{background:#f7fafd;border:1px solid var(--border);border-radius:12px;
+    padding:12px 18px;flex:1;}
+  .step .body b{color:var(--primary);}
+
+  /* ===== Cards grid ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:16px 0;}
+  .card{
+    background:#f7fafd;border:1px solid var(--border);border-radius:12px;padding:16px 18px;
+  }
+  .card h4{color:var(--primary);font-size:1rem;margin-bottom:6px;}
+  .card p{font-size:.9rem;margin:0;color:var(--muted);}
+
+  .stat{
+    text-align:center;background:linear-gradient(135deg,#f0f6fd,#e8f2fc);
+    border:1px solid var(--border);border-radius:12px;padding:18px 12px;
+  }
+  .stat .big{font-size:1.5rem;font-weight:800;color:var(--primary);}
+  .stat .lbl{font-size:.85rem;color:var(--muted);margin-top:4px;}
+
+  .tag{
+    display:inline-block;font-size:.78rem;padding:2px 12px;border-radius:999px;
+    font-weight:700;
+  }
+  .tag.high{background:#fdeaea;color:var(--red);}
+  .tag.mid{background:#fff4e5;color:#b06a00;}
+  .tag.low{background:#e7f6f4;color:var(--green);}
+
+  footer{
+    text-align:center;color:var(--muted);font-size:.85rem;padding:30px 0 40px;
+  }
+
+  /* ===== Animations ===== */
+  @keyframes fadeSlideUp{
+    from{opacity:0;transform:translateY(28px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes floatBadge{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-4px);}
+  }
+  @keyframes gradientShift{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+  }
+  @keyframes popIn{
+    from{opacity:0;transform:scale(.85);}
+    to{opacity:1;transform:scale(1);}
+  }
+  @keyframes drawLine{
+    from{width:0;}
+    to{width:56px;}
+  }
+  @keyframes pulseRing{
+    0%{box-shadow:0 0 0 0 rgba(13,59,102,.35);}
+    70%{box-shadow:0 0 0 10px rgba(13,59,102,0);}
+    100%{box-shadow:0 0 0 0 rgba(13,59,102,0);}
+  }
+
+  header{
+    background:linear-gradient(120deg,var(--primary) 0%,var(--primary-light) 45%,var(--green) 100%);
+    background-size:200% 200%;
+    animation:gradientShift 12s ease infinite;
+  }
+  header .badge{animation:floatBadge 3.2s ease-in-out infinite;}
+  header h1,header p,header .meta{animation:fadeSlideUp .8s ease both;}
+  header p{animation-delay:.15s;}
+  header .meta{animation-delay:.3s;}
+
+  section{
+    opacity:0;transform:translateY(28px);
+    transition:opacity .6s ease, transform .6s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  section.is-visible{opacity:1;transform:translateY(0);}
+  section:hover{box-shadow:0 10px 28px rgba(13,59,102,.10);border-color:#cfdbe8;}
+
+  section h2::after{
+    content:"";display:block;height:3px;width:0;background:var(--accent);
+    margin-top:6px;animation:drawLine .8s ease forwards;animation-delay:.3s;
+  }
+  section.is-visible h2::after{animation-play-state:running;}
+
+  .card, .stat{
+    transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 8px 20px rgba(13,59,102,.12);
+    background:#eef5fc;
+  }
+  .stat:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 8px 20px rgba(13,59,102,.14);}
+  .stat .big{display:inline-block;}
+  section.is-visible .stat .big{animation:popIn .5s ease both;animation-delay:.15s;}
+
+  .step{animation:none;}
+  section.is-visible .step{animation:fadeSlideUp .55s ease both;}
+  section.is-visible .step:nth-child(1){animation-delay:.05s;}
+  section.is-visible .step:nth-child(2){animation-delay:.12s;}
+  section.is-visible .step:nth-child(3){animation-delay:.19s;}
+  section.is-visible .step:nth-child(4){animation-delay:.26s;}
+  section.is-visible .step:nth-child(5){animation-delay:.33s;}
+  section.is-visible .step:nth-child(6){animation-delay:.40s;}
+
+  .step .num{transition:transform .25s ease, box-shadow .25s ease;}
+  .step:hover .num{transform:scale(1.12);animation:pulseRing 1.4s ease infinite;}
+
+  tr{transition:background .2s ease;}
+  tbody tr:hover td, tr:hover td{background:#eef5fc !important;}
+
+  .callout{transition:transform .2s ease;}
+  .callout:hover{transform:translateX(-3px);}
+
+  nav.toc a{transition:color .2s ease, padding-right .2s ease;}
+  nav.toc a:hover{padding-right:4px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;}
+    section{opacity:1;transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">دراسة جدوى أولية — أغسطس 2026</div>
+  <h1>منصة وسيط ضمان للمدفوعات (Escrow)<br>للتعاملات المباشرة عبر السوشيال ميديا في مصر</h1>
+  <p>دراسة شاملة تغطي الفكرة، تحليل السوق، المنافسين، النموذج المالي، الإطار القانوني، البنية التقنية، المخاطر، وخارطة الطريق التنفيذية.</p>
+  <div class="meta">إعداد: فريق المشروع &nbsp;|&nbsp; التاريخ: 6 أغسطس 2026 &nbsp;|&nbsp; السوق المستهدف: جمهورية مصر العربية</div>
+</header>
+
+<div class="container">
+
+<!-- ============ TOC ============ -->
+<nav class="toc">
+  <h2>📑 محتويات الدراسة</h2>
+  <ol>
+    <li><a href="#s1">الملخص التنفيذي</a></li>
+    <li><a href="#s2">فكرة المشروع: المشكلة والحل</a></li>
+    <li><a href="#s3">رحلة المستخدم (سيناريو العملية)</a></li>
+    <li><a href="#s4">تحليل السوق المصري</a></li>
+    <li><a href="#s5">تحليل المنافسين</a></li>
+    <li><a href="#s6">النموذج المالي والعمولات</a></li>
+    <li><a href="#s7">الإطار القانوني والتنظيمي</a></li>
+    <li><a href="#s8">تسوية النزاعات والتحكيم</a></li>
+    <li><a href="#s9">البنية التقنية المقترحة</a></li>
+    <li><a href="#s10">تحليل SWOT</a></li>
+    <li><a href="#s11">المخاطر وخطط التخفيف</a></li>
+    <li><a href="#s12">خارطة الطريق وخطة التنفيذ (MVP)</a></li>
+    <li><a href="#s13">الخلاصة والتوصيات</a></li>
+  </ol>
+</nav>
+
+<!-- ============ 1. Executive Summary ============ -->
+<section id="s1">
+  <h2>1️⃣ الملخص التنفيذي</h2>
+  <p>
+    المشروع عبارة عن <b>منصة وساطة مالية (Escrow)</b> تعمل كطرف ثالث محايد بين البائع والمشتري في التعاملات المباشرة التي تتم خارج المتاجر الإلكترونية المنظمة — خصوصاً صفحات فيسبوك، وجروبات البيع، وبيع الاشتراكات والخدمات الرقمية.
+  </p>
+  <p>
+    بدلاً من معضلة "أدفع الأول ولا تفعل الأول؟"، يدفع المشتري قيمة المنتج أو الخدمة عبر المنصة، فتُحفظ الأموال <b>معلّقة (Held)</b> في حساب ضمان، ولا تُحرَّر للبائع إلا بعد تأكيد المشتري استلام المنتج أو تفعيل الخدمة. وفي حال حدوث خلاف، تتدخل المنصة بآلية تحقيق وتسوية نزاعات مبنية على الأدلة (محادثات، لقطات شاشة، إثباتات تسليم).
+  </p>
+
+  <div class="grid">
+    <div class="stat"><div class="big">5%</div><div class="lbl">عمولة مقترحة على العملية (قابلة للتخفيض بالشرائح)</div></div>
+    <div class="stat"><div class="big">2.75% + 3 ج</div><div class="lbl">تكلفة بوابة الدفع (Paymob كمرجع سوقي)</div></div>
+    <div class="stat"><div class="big">2+</div><div class="lbl">منافسين محليين قائمين فعلاً (Pay Confirmed – Escrow Pay)</div></div>
+    <div class="stat"><div class="big">6–12 شهر</div><div class="lbl">الإطار الزمني المتوقع للوصول لـ MVP فعّال</div></div>
+  </div>
+
+  <div class="callout info">
+    <strong>النتيجة الجوهرية للدراسة</strong>
+    الفكرة ليست جديدة كلياً — توجد شركات مصرية تعمل بنفس النموذج — لكن السوق لا يزال مفتوحاً ولا يوجد لاعب مهيمن وصل للمستخدم العادي الذي يشتري من صفحات فيسبوك. الفرصة الحقيقية في <b>التنفيذ المتفوق وتجربة الاستخدام والتركيز على شريحة الخدمات الرقمية والاشتراكات</b> التي لا يخدمها المنافسون الحاليون بشكل متخصص.
+  </div>
+</section>
+
+<!-- ============ 2. Idea ============ -->
+<section id="s2">
+  <h2>2️⃣ فكرة المشروع: المشكلة والحل</h2>
+
+  <h3>المشكلة</h3>
+  <p>
+    في التعاملات المباشرة عبر السوشيال ميديا (شراء منتج من صفحة فيسبوك، شراء اشتراك Netflix/شاهد من بائع، شراء حساب لعبة أو خدمة رقمية)، يقع الطرفان في معضلة ثقة كلاسيكية:
+  </p>
+  <ul>
+    <li>المشتري يخاف يدفع والبائع ما يسلّمش (نصب).</li>
+    <li>البائع يخاف يسلّم والمشتري ما يدفعش.</li>
+    <li>في النهاية، طرف يضطر "يثق ويمشي الدنيا" — ونسبة غير قليلة من الصفقات تنتهي بخسارة طرف.</li>
+  </ul>
+  <p>
+    الحلول القائمة لا تغطي هذه الفجوة: أمازون وجوميا منظومات <b>مقفولة</b> على بائعيها المسجلين فقط، وإنستاباي مجرد تحويل فوري بلا أي ضمان، والدفع عند الاستلام (COD) لا ينطبق على الخدمات والاشتراكات الرقمية أصلاً.
+  </p>
+
+  <h3>الحل</h3>
+  <p>
+    منصة وسيط تلعب دور "الحكم" في العملية: تأخذ بيانات الطرف الآخر (رقم هاتف / إيميل / ID)، ترسل له رابط عملية مؤمّن، يدفع فيها المشتري، فتُجمَّد الأموال، وعند تأكيد الاستلام تُحرَّر للبائع فوراً. مع نظام تقييمات (Ratings) للطرفين يبني سمعة تراكمية — فيصبح التعامل عبر المنصة <b>شهادة مصداقية</b> في حد ذاته.
+  </p>
+
+  <div class="callout success">
+    <strong>لماذا قد تنجح الفكرة؟</strong>
+    65% من التجارة الإلكترونية في مصر ما زالت دفعاً عند الاستلام (COD) — أي أن السوق كله مبني على عدم الثقة المسبقة. المنتج الذي يحل مشكلة الثقة في التعاملات المباشرة يعالج ألم حقيقي ومتكرر يومياً لدى ملايين المستخدمين.
+  </div>
+
+  <h3>القيمة المضافة لكل طرف</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>الطرف</th><th>المشكلة الحالية</th><th>ما تقدمه المنصة</th></tr>
+    <tr><td>المشتري</td><td>يدفع مقدماً بدون ضمان → عرضة للنصب</td><td>فلوسه محفوظة ولا تصل للبائع إلا بعد تأكيده الاستلام</td></tr>
+    <tr><td>البائع الجاد</td><td>صعوبة إقناع العملاء الجدد بالثقة به</td><td>"أنا بشتغل عبر منصة ضمان" = أداة إقناع وميزة بيعية</td></tr>
+    <tr><td>السوق عموماً</td><td>لا يوجد سجل سمعة للبائعين الأفراد</td><td>تقييمات وتعليقات تراكمية تنقل الثقة من صفقة لأخرى</td></tr>
+  </table>
+  </div>
+</section>
+
+<!-- ============ 3. User Flow ============ -->
+<section id="s3">
+  <h2>3️⃣ رحلة المستخدم (سيناريو العملية)</h2>
+  <p>مثال واقعي: بائع على صفحة فيسبوك يبيع اشتراك شهري، ومشتري يريد الشراء لكن يخشى الدفع المسبق.</p>
+
+  <div class="flow">
+    <div class="step">
+      <div class="num">1</div>
+      <div class="body"><b>إنشاء العملية:</b> البائع (أو المشتري) ينشئ عملية جديدة على المنصة: وصف المنتج/الخدمة، المبلغ، مدة التسليم المتوقعة، وبيانات التواصل مع الطرف الآخر (رقم هاتف / إيميل).</div>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <div class="body"><b>دعوة الطرف الآخر:</b> المنصة ترسل رابط العملية للمشتري عبر SMS/واتساب/إيميل. لا يحتاج الطرف الثاني تسجيلاً معقداً — يكفي تأكيد الهوية برمز OTP.</div>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <div class="body"><b>الدفع والتجميد:</b> المشتري يدفع عبر بوابة الدفع (بطاقة / محفظة / فوري). المبلغ يدخل <b>حساب الضمان</b> ويظهر للطرفين بحالة "محفوظ — معلّق". البائع يرى أن الفلوس موجودة فعلاً فيطمئن ويسلّم.</div>
+    </div>
+    <div class="step">
+      <div class="num">4</div>
+      <div class="body"><b>التسليم:</b> البائع يسلّم المنتج/يفعّل الاشتراك ويرفع إثبات التسليم (سكرين شوت / بوليصة شحن / مراسلة).</div>
+    </div>
+    <div class="step">
+      <div class="num">5</div>
+      <div class="body"><b>التأكيد والتحرير:</b> المشتري يضغط "تأكيد الاستلام" → المبلغ يتحرر لحساب البائع فوراً (مخصوماً منه العمولة). وإن لم يؤكد خلال مهلة محددة (مثلاً 72 ساعة بعد إثبات التسليم) تُحرَّر تلقائياً لحماية البائع من المماطلة.</div>
+    </div>
+    <div class="step">
+      <div class="num">6</div>
+      <div class="body"><b>في حالة النزاع:</b> أي طرف يفتح "تظلم" → العملية تتجمد → فريق التسوية يطلب الأدلة (محادثات، إثباتات، بيانات الاشتراك) → قرار: تحرير كامل للبائع، أو رد كامل للمشتري، أو تسوية جزئية. بعد الإغلاق، يقيّم كل طرف الآخر (Rating + تعليق).</div>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <strong>ملاحظة تصميمية مهمة</strong>
+    المستخدم يمكنه أن يكون بائعاً ومشترياً في نفس الوقت من حساب واحد (نموذج إنستاباي: "عايز حد يدفعلك سهلة، عايز تدفع سهلة") — هذا يخفض حاجز الدخول ويوسّع القاعدة بسرعة.
+  </div>
+</section>
+
+<!-- ============ 4. Market ============ -->
+<section id="s4">
+  <h2>4️⃣ تحليل السوق المصري</h2>
+
+  <h3>البيئة العامة</h3>
+  <ul>
+    <li><b>حجم السوق:</b> مصر أكبر سوق استهلاكي في العالم العربي بأكثر من 110 ملايين نسمة، مع نمو متسارع في التجارة الإلكترونية.</li>
+    <li><b>الثقة منخفضة:</b> حوالي 65% من المعاملات الإلكترونية تتم بنظام الدفع عند الاستلام — مؤشر مباشر على فجوة الثقة التي يعالجها المشروع.</li>
+    <li><b>اقتصاد غير رسمي ضخم:</b> آلاف صفحات وجروبات فيسبوك وتليجرام تبيع منتجات وخدمات رقمية يومياً بدون أي حماية للطرفين — هذه هي الشريحة المستهدفة الأساسية.</li>
+    <li><b>بنية دفع ناضجة:</b> بوابات دفع محلية قوية (Paymob وغيرها) + شبكة مدفوعات لحظية (إنستاباي) تابعة للبنك المركزي + انتشار ضخم للمحافظ الإلكترونية — البنية التحتية للدفع جاهزة، والناقص هو طبقة "الضمان" فوقها.</li>
+  </ul>
+
+  <h3>الشرائح المستهدفة (بالأولوية)</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>الشريحة</th><th>طبيعة المعاملات</th><th>متوسط قيمة الصفقة</th><th>الأولوية</th></tr>
+    <tr><td>الاشتراكات والخدمات الرقمية</td><td>اشتراكات منصات، شحن ألعاب، حسابات، تصميم وخدمات فريلانس</td><td>100 – 1,500 ج</td><td><span class="tag high">عالية</span></td></tr>
+    <tr><td>المنتجات المادية عبر صفحات فيسبوك</td><td>ملابس، إلكترونيات، إكسسوارات</td><td>300 – 5,000 ج</td><td><span class="tag high">عالية</span></td></tr>
+    <tr><td>الأجهزة المستعملة بين الأفراد</td><td>موبايلات، لابتوبات، أجهزة</td><td>3,000 – 30,000 ج</td><td><span class="tag mid">متوسطة</span></td></tr>
+    <tr><td>الخدمات الحرفية والمشاريع الصغيرة</td><td>دفعات مقدمة لأعمال (تشطيبات، تصنيع)</td><td>5,000 – 100,000 ج</td><td><span class="tag mid">متوسطة — مرحلة لاحقة</span></td></tr>
+  </table>
+  </div>
+
+  <div class="callout info">
+    <strong>لماذا البدء بالخدمات الرقمية؟</strong>
+    لا تحتاج شحن ولا لوجستيات، التحقق من التسليم سهل (هل الاشتراك اتفعل؟ هل الحساب اتبعت؟)، دورة العملية قصيرة (ساعات لا أيام)، ولا يخدمها أي منافس حالي بشكل متخصص. هي المجال الأسرع لبناء حجم معاملات وسمعة للمنصة.
+  </div>
+</section>
+
+<!-- ============ 5. Competitors ============ -->
+<section id="s5">
+  <h2>5️⃣ تحليل المنافسين</h2>
+
+  <div class="callout danger">
+    <strong>تصحيح مهم لفرضية المشروع</strong>
+    الفرضية الأصلية كانت "محدش منفذ الفكرة". الواقع: الفكرة <b>منفذة فعلاً في مصر</b> من أكثر من لاعب — لكن لا يوجد لاعب مهيمن، والوعي الجماهيري بهذه الخدمات شبه معدوم. المنافسة إذن ليست على "ابتكار الفكرة" بل على "امتلاك السوق بالتنفيذ والانتشار".
+  </div>
+
+  <div class="table-wrap">
+  <table>
+    <tr><th>المنافس</th><th>النوع</th><th>النموذج</th><th>نقاط القوة</th><th>نقاط الضعف / الفجوة</th></tr>
+    <tr>
+      <td><b>Pay Confirmed</b></td>
+      <td>شركة مصرية ناشئة</td>
+      <td>Escrow + خدمات لوجستية وشحن: تحصيل مسبق من المشتري يُحفظ لحين استلام البضاعة/الخدمة ثم يُصرف للبائع</td>
+      <td>نموذج ناضج يجمع الشحن والضمان معاً، تمركز واضح حول التجارة</td>
+      <td>تركيز لوجستي/تجاري أكثر من المستهلك الفردي على فيسبوك؛ غير معروفة جماهيرياً</td>
+    </tr>
+    <tr>
+      <td><b>Escrow Pay</b></td>
+      <td>شركة مصرية (القاهرة، تأسست 2022)</td>
+      <td>نفس النموذج حرفياً: دفع مقدم محفوظ آلياً لا يُحرر إلا بعد تحقق شروط العقد، لعملاء أفراد وشركات</td>
+      <td>نموذج واضح ومباشر، يخدم الأفراد والشركات معاً</td>
+      <td>انتشار محدود جداً، لا حضور قوي في سوق السوشيال ميديا المصري</td>
+    </tr>
+    <tr>
+      <td><b>Waffy App</b></td>
+      <td>منصة سعودية (جدة، تأسست 2022)</td>
+      <td>ضمان مالي كطرف ثالث محايد يحفظ الأموال حتى تسليم المنتج/الخدمة والتحقق منها</td>
+      <td>تجربة مصقولة لنفس فكرة المشروع تماماً، إثبات إقليمي على قابلية النموذج للتنفيذ</td>
+      <td>سعودية — لا تعمل في السوق المصري حالياً؛ لا يوجد تأكيد علني بأنها مرخّصة رسمياً من ساما بصفة مقدم خدمة دفع (يُنصح بالتحقق قبل الاستشهاد بها كمرجع ترخيص)</td>
+    </tr>
+    <tr>
+      <td><b>حسابات الضمان البنكية</b></td>
+      <td>بنوك (مثل بنك الإمارات دبي الوطني مصر)</td>
+      <td>Escrow Account رسمي للمعاملات الكبيرة</td>
+      <td>ثقة مؤسسية كاملة، أمان قانوني</td>
+      <td>رسوم مرتفعة (تصل لعشرات الآلاف سنوياً)، إجراءات معقدة — غير مناسبة إطلاقاً لصفقة بـ 500 جنيه</td>
+    </tr>
+    <tr>
+      <td><b>إنستاباي</b></td>
+      <td>شبكة مدفوعات لحظية (البنك المركزي)</td>
+      <td>تحويل فوري مباشر بين الحسابات</td>
+      <td>مجاني/شبه مجاني، فوري، انتشار هائل</td>
+      <td><b>لا يقدم أي ضمان</b> — الفلوس تصل فوراً ولا يمكن تجميدها أو استرجاعها. ليس منافساً وظيفياً بل بديل "رخيص وخطير"</td>
+    </tr>
+    <tr>
+      <td><b>أمازون / جوميا</b></td>
+      <td>متاجر إلكترونية كبرى</td>
+      <td>منظومة مقفولة: دفع + شحن + إرجاع داخل المنصة فقط</td>
+      <td>ثقة عالية، حماية مشتري حقيقية</td>
+      <td>لا تغطي البائع الفردي على فيسبوك إطلاقاً — عمولاتها 3–15% ومتاحة فقط لبائعيها المسجلين</td>
+    </tr>
+  </table>
+  </div>
+
+  <h3>الفجوة التنافسية (أين نلعب؟)</h3>
+  <ul>
+    <li><b>تجربة استخدام بسيطة جداً:</b> إنشاء عملية ومشاركتها برابط في أقل من دقيقة، بدون تسجيل معقد للطرف الثاني.</li>
+    <li><b>التخصص في المعاملات الصغيرة والرقمية:</b> الشريحة التي لا يستهدفها أحد بجدية (اشتراكات، خدمات، شحن ألعاب).</li>
+    <li><b>عمولة أقل من المتاجر الكبرى</b> (5% مقابل 3–15% لدى أمازون وجوميا) مع حد أدنى معقول.</li>
+    <li><b>نظام سمعة محمول:</b> تقييمات البائع تنتقل معه بين الصفقات — حافز قوي للبائعين الجادين للانضمام.</li>
+  </ul>
+</section>
+
+<!-- ============ 6. Financial Model ============ -->
+<section id="s6">
+  <h2>6️⃣ النموذج المالي والعمولات</h2>
+
+  <h3>هيكل التكاليف لكل عملية</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>البند</th><th>القيمة</th><th>ملاحظات</th></tr>
+    <tr><td>رسوم بوابة الدفع (مرجع Paymob)</td><td>2.75% + 3 ج</td><td>تنخفض تلقائياً مع نمو حجم الأعمال (تسعير متدرج)</td></tr>
+    <tr><td>تكلفة إدارة النزاعات</td><td>متغيرة (بشرية)</td><td>تعتمد على معدل النزاعات — تُقدَّر مبدئياً بـ 0.5–1% من قيمة المعاملات</td></tr>
+    <tr><td>تكاليف تشغيلية (سيرفرات، SMS، دعم)</td><td>ثابتة شهرية</td><td>تُوزَّع على عدد العمليات — تنخفض نسبتها مع النمو</td></tr>
+  </table>
+  </div>
+
+  <h3>التسعير المقترح</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>الشريحة (قيمة العملية)</th><th>العمولة</th><th>الحد الأدنى</th><th>مثال: عملية بـ 100 ج</th><th>مثال: عملية بـ 1,000 ج</th><th>مثال: عملية بـ 5,000 ج</th></tr>
+    <tr><td>حتى 500 ج</td><td>5%</td><td>10 ج</td><td>10 ج (الحد الأدنى)</td><td>—</td><td>—</td></tr>
+    <tr><td>500 – 3,000 ج</td><td>4%</td><td>—</td><td>—</td><td>40 ج</td><td>—</td></tr>
+    <tr><td>أكثر من 3,000 ج</td><td>3%</td><td>—</td><td>—</td><td>—</td><td>150 ج</td></tr>
+  </table>
+  </div>
+
+  <h3>حساب صافي الربح لكل عملية (مثال عملي)</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>البند</th><th>عملية 1,000 ج (عمولة 4%)</th><th>عملية 300 ج (عمولة 5%)</th><th>عملية 5,000 ج (عمولة 3%)</th></tr>
+    <tr><td>إجمالي العمولة المحصّلة</td><td>40 ج</td><td>15 ج</td><td>150 ج</td></tr>
+    <tr><td>رسوم البوابة (2.75% + 3 ج)</td><td>− 30.5 ج</td><td>− 11.25 ج</td><td>− 140.5 ج</td></tr>
+    <tr><td><b>صافي هامش المنصة</b></td><td><b>9.5 ج</b></td><td><b>3.75 ج</b></td><td><b>9.5 ج</b></td></tr>
+    <tr><td>الهامش كنسبة من قيمة العملية</td><td>0.95%</td><td>1.25%</td><td>0.19%</td></tr>
+  </table>
+  </div>
+
+  <div class="callout warn">
+    <strong>حقيقة مالية يجب استيعابها</strong>
+    الهامش الصافي ضعيف على العمليات الكبيرة لأن رسوم البوابة تأكل معظم العمولة. الربحية الحقيقية تأتي من: (1) <b>الحجم</b> في العمليات الصغيرة والمتوسطة، (2) <b>إعادة التفاوض مع البوابة</b> بعد الوصول لحجم معاملات كبير (سعر مؤسسي أقل من 2.75%)، (3) مصادر إيراد إضافية لاحقاً: اشتراكات مميزة للبائعين المحترفين، إبراز الصفحات، تأمين اختياري إضافي.
+  </div>
+
+  <h3>مقارنة تنافسية للعمولة</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>البديل</th><th>التكلفة على المستخدم</th><th>الضمان المقدم</th></tr>
+    <tr><td>منصتنا (مقترح)</td><td>3–5%</td><td>ضمان كامل + تسوية نزاعات + سمعة</td></tr>
+    <tr><td>إنستاباي</td><td>≈ 0%</td><td>لا شيء — تحويل نهائي لا يقبل الاسترجاع</td></tr>
+    <tr><td>أمازون مصر</td><td>3–15% (على البائع المسجل فقط)</td><td>حماية داخل المنصة المقفولة فقط</td></tr>
+    <tr><td>جوميا</td><td>≈ 4–15% شامل الضريبة</td><td>حماية داخل المنصة المقفولة فقط</td></tr>
+    <tr><td>حساب ضمان بنكي</td><td>رسوم سنوية كبيرة + إجراءات</td><td>ضمان بنكي كامل لكن للصفقات الكبيرة فقط</td></tr>
+  </table>
+  </div>
+
+  <div class="callout info">
+    <strong>رسالة تسويقية أساسية</strong>
+    لا تنافس إنستاباي في السعر (معركة خاسرة — خدمته شبه مجانية). أنت لا تبيع "تحويل فلوس" بل تبيع <b>الضمان</b>. الرسالة: "إنستاباي بيوصّل فلوسك، إحنا بنضمنها".
+  </div>
+</section>
+
+<!-- ============ 7. Legal ============ -->
+<section id="s7">
+  <h2>7️⃣ الإطار القانوني والتنظيمي</h2>
+
+  <div class="callout danger">
+    <strong>أخطر نقطة في المشروع كله</strong>
+    قانون البنك المركزي والجهاز المصرفي رقم 194 لسنة 2020 <b>يحظر على أي شخص طبيعي أو اعتباري غير مرخّص له تشغيل نظم الدفع أو تقديم خدمات الدفع</b> — سواء من داخل مصر أو من خارجها للمقيمين فيها. تشغيل المنصة بدون غطاء قانوني سليم يعرّض المشروع للإغلاق والمساءلة.
+  </div>
+
+  <h3>شروط الترخيص المباشر من البنك المركزي (الطريق الصعب)</h3>
+  <ul>
+    <li>يجب أن يكون الكيان <b>شركة مساهمة مصرية</b>.</li>
+    <li>حد أدنى لرأس المال: <b>10 ملايين جنيه</b> لمقدم خدمة دفع فئة (ب)، و<b>30 مليون جنيه</b> لفئة (أ).</li>
+    <li>موافقة مسبقة من البنك المركزي قبل قيد النشاط في السجل التجاري أصلاً.</li>
+    <li>القواعد صادرة حديثاً (2025) مع فترة انتقالية 12 شهراً للكيانات القائمة لتوفيق أوضاعها.</li>
+  </ul>
+
+  <h3>الطريق العملي المقترح للانطلاق (الشراكة)</h3>
+  <ol>
+    <li><b>العمل تحت مظلة مرخّص قائم:</b> التعاقد مع بوابة دفع مرخّصة (Paymob أو بنك) بحيث تكون الأموال من الناحية القانونية داخل منظومتهم المرخّصة، والمنصة تعمل كطبقة <b>وساطة تجارية وتسوية نزاعات</b> فوق البنية المرخّصة — وليست "مشغّل نظام دفع".</li>
+    <li><b>حساب الضمان باسم البنك/الشريك المرخّص:</b> الأموال المعلّقة تُحفظ في حساب بنكي مخصص (Segregated/Escrow Account) باتفاق ثلاثي — المنصة لا "تمسك" أموال العملاء في حسابها التجاري.</li>
+    <li><b>الاستعانة بمحامٍ متخصص في التكنولوجيا المالية (FinTech)</b> لصياغة الهيكل والعقود — وليس محامياً عاماً.</li>
+    <li><b>التواصل المبكر مع البنك المركزي / حاضنات FinTech:</b> مصر بها مسارات دعم للشركات الناشئة المالية — الدخول المبكر في حوار مع الجهات التنظيمية أفضل بكثير من المفاجآت.</li>
+  </ol>
+
+  <h3>أسئلة قانونية حاسمة يجب حسمها مع المحامي</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>السؤال</th><th>التوجه المبدئي (يحتاج تأكيداً قانونياً)</th></tr>
+    <tr><td>هل يجوز اشتراط قبول المستخدم بقرار المنصة في فض النزاع على أمواله؟</td><td>يجوز تعاقدياً بين الشركات، لكن مع المستهلك العادي قد تُطعن الشروط المفروضة بموجب قانون حماية المستهلك — الأسلم صياغتها كـ"آلية تسوية" لا "تحكيم ملزم"</td></tr>
+    <tr><td>هل يمكن نقل النزاع للقضاء بعد قرار المنصة؟</td><td>نعم — لا يمكن منع حق التقاضي دستورياً. الأفضل أن تنص الشروط صراحة على أن قرار المنصة لا يمنع اللجوء للقضاء (يزيد الثقة ويحمي المنصة قانونياً)</td></tr>
+    <tr><td>ما مسؤولية المنصة لو حدث تسريب لبيانات بطاقات المستخدمين؟</td><td>يخضع لقانون حماية البيانات الشخصية 151 لسنة 2020 — يجب عدم تخزين بيانات البطاقات أصلاً (تبقى لدى البوابة المرخّصة المتوافقة مع PCI-DSS)</td></tr>
+    <tr><td>هل تجميد الأموال لدى شريك مرخّص يجعلنا "مقدم خدمة دفع"؟</td><td>يعتمد كلياً على صياغة العقود وتدفق الأموال — السؤال الأهم الذي يجب أن يجيب عنه محامي FinTech قبل كتابة أي كود</td></tr>
+  </table>
+  </div>
+</section>
+
+<!-- ============ 8. Disputes ============ -->
+<section id="s8">
+  <h2>8️⃣ تسوية النزاعات — قلب النموذج التشغيلي</h2>
+  <p>
+    كما لاحظ الفريق في النقاش الداخلي: "المشكلة الوحيدة إنك محتاج ناس ورا تحقق لو حصل مشكلة في اتفاق". هذا صحيح — وهو <b>أهم مركز تكلفة وأهم مصدر قيمة</b> في المشروع معاً.
+  </p>
+
+  <h3>آلية التسوية المقترحة</h3>
+  <ul>
+    <li><b>المستوى صفر — الوقاية:</b> شروط عملية واضحة قبل الدفع (الوصف، المدة، معايير القبول)، ومهلة تسليم، وتحرير تلقائي بعد مهلة تأكيد المشتري لحماية البائع من المماطلة.</li>
+    <li><b>المستوى الأول — التواصل الموجَّه:</b> فتح قناة تواصل بين الطرفين داخل المنصة (محادثة موثّقة) قبل التصعيد — كثير من النزاعات تُحل هنا.</li>
+    <li><b>المستوى الثاني — التحقيق:</b> مسؤول تسوية يطلب الأدلة: سكرين شوت المحادثات، إثبات التفعيل (للاشتراكات)، بوليصة الشحن وتتبعها (للمنتجات)، تسجيلات الموقع المُقدَّمة منه الخدمة.</li>
+    <li><b>المستوى الثالث — القرار:</b> تحرير كامل / رد كامل / تسوية جزئية — مع سجل مكتوب للقرار وأسبابه.</li>
+  </ul>
+
+  <div class="table-wrap">
+  <table>
+    <tr><th>نوع الأدلة المقبولة</th><th>الخدمات الرقمية/الاشتراكات</th><th>المنتجات المادية</th></tr>
+    <tr><td>إثبات التسليم</td><td>سكرين شوت التفعيل، بيانات دخول مرسلة في وقت محدد، إيميل الاشتراك</td><td>بوليصة شحن + حالة التتبع "تم التسليم"، صورة الاستلام</td></tr>
+    <tr><td>إثبات الاتفاق</td><td>محادثة داخل المنصة أو سكرين شوت موثّق بتاريخ</td><td>نفس الشيء + مواصفات المنتج المتفق عليها</td></tr>
+    <tr><td>إثبات العيب</td><td>فشل تفعيل موثّق بالوقت، بيانات لا تعمل</td><td>صور/فيديو المنتج المخالف فور الاستلام</td></tr>
+  </table>
+  </div>
+
+  <div class="callout warn">
+    <strong>قاعدة ذهبية لحماية المنصة</strong>
+    بمجرد دفع المشتري، الأموال <b>خرجت من عنده بالفعل</b> ولا تعود إلا بقرار تسوية موثّق — هذا يمنع "سحب الدفع" العشوائي ويحمي البائع. وفي المقابل، الأموال لا تصل للبائع إلا بتأكيد أو بانقضاء المهلة — وهذا يحمي المشتري. التوازن بين الحمايتين هو جوهر مصداقية المنصة.
+  </div>
+</section>
+
+<!-- ============ 9. Tech ============ -->
+<section id="s9">
+  <h2>9️⃣ البنية التقنية المقترحة</h2>
+
+  <h3>المكونات الأساسية</h3>
+  <div class="grid">
+    <div class="card"><h4>Backend API</h4><p>Node.js + Express (أو NestJS للتنظيم)، REST API مع WebSocket لتحديثات حالة العملية لحظياً للطرفين.</p></div>
+    <div class="card"><h4>قاعدة البيانات</h4><p>PostgreSQL للمعاملات المالية (ACID صارم — الأموال لا تحتمل عدم الاتساق) + Redis للجلسات والـ OTP.</p></div>
+    <div class="card"><h4>بوابة الدفع</h4><p>Paymob API: إنشاء Payment Intent، وWebhooks لتأكيد الدفع، وRefund API لرد الأموال عند قرار التسوية.</p></div>
+    <div class="card"><h4>آلة الحالة (State Machine)</h4><p>العملية تتحرك عبر حالات صارمة: Created → Invited → Paid/Held → Delivered → Confirmed → Released، مع فرع Disputed → Investigating → Resolved. لا انتقالات خارج القواعد.</p></div>
+    <div class="card"><h4>الهوية والأمان</h4><p>OTP بالهاتف، KYC للمبالغ الكبيرة، عدم تخزين بيانات بطاقات نهائياً (Tokenization عند البوابة)، تشفير كامل، سجل تدقيق (Audit Log) غير قابل للتعديل لكل حركة أموال.</p></div>
+    <div class="card"><h4>لوحة النزاعات</h4><p>Dashboard داخلي لفريق التسوية: قائمة النزاعات، الأدلة المرفوعة، خط زمني للعملية، أزرار قرار (تحرير/رد/تسوية جزئية) بصلاحيات مزدوجة للمبالغ الكبيرة.</p></div>
+  </div>
+
+  <h3>مبادئ هندسية حاسمة</h3>
+  <ul>
+    <li><b>الأموال تُدار بالـ Webhooks لا بإجراءات المستخدم:</b> لا تعتمد على استجابة المتصفح لتأكيد الدفع — فقط Webhook موقّع من البوابة يغيّر حالة الأموال.</li>
+    <li><b>Idempotency في كل مكان:</b> تكرار الطلب (ضغطة مزدوجة، إعادة إرسال Webhook) يجب ألا يحرّر مبلغاً مرتين.</li>
+    <li><b>Ledger محاسبي مزدوج القيد:</b> كل جنيه له قيد مدين ودائن — يمكّنك من كشف أي خلل فوراً ويسهّل المراجعة القانونية.</li>
+    <li><b>فصل واضح:</b> أموال العملاء المعلّقة في حساب منفصل تماماً عن حساب تشغيل الشركة — متطلب قانوني وأخلاقي معاً.</li>
+  </ul>
+</section>
+
+<!-- ============ 10. SWOT ============ -->
+<section id="s10">
+  <h2>🔟 تحليل SWOT</h2>
+  <div class="table-wrap">
+  <table>
+    <tr><th style="width:50%">نقاط القوة (Strengths)</th><th>نقاط الضعف (Weaknesses)</th></tr>
+    <tr>
+      <td>
+        • يعالج ألماً حقيقياً متكرراً يومياً (فجوة الثقة)<br>
+        • نموذج مثبت إقليمياً (وفّي السعودية مرخّصة وناجحة)<br>
+        • البنية التحتية للدفع في مصر جاهزة وناضجة<br>
+        • نظام السمعة يخلق حاجز تحويل (Switching Cost) مع الوقت<br>
+        • فريق مؤسس يمتلك خبرة تقنية تنفيذية قوية (Full-stack + مدفوعات)
+      </td>
+      <td>
+        • هامش ربح ضعيف لكل عملية بسبب رسوم البوابة<br>
+        • اعتماد كامل على شريك مرخّص في البداية<br>
+        • تكلفة تشغيل بشرية ثابتة (فريق نزاعات) لا يمكن أتمتتها بالكامل<br>
+        • لا يوجد رأس مال كافٍ للترخيص المباشر (10–30 مليون ج)<br>
+        • بناء الثقة في "منصة تحفظ فلوس الناس" يحتاج وقتاً
+      </td>
+    </tr>
+    <tr><th>الفرص (Opportunities)</th><th>التهديدات (Threats)</th></tr>
+    <tr>
+      <td>
+        • لا يوجد لاعب مهيمن — المنافسون الحاليون شبه مجهولين جماهيرياً<br>
+        • شريحة الخدمات الرقمية والاشتراكات غير مخدومة بشكل متخصص<br>
+        • 65% من السوق ما زال COD = ملايين معاملات تبحث عن بديل ثقة<br>
+        • التوسع لاحقاً: B2B، صفقات الأجهزة المستعملة، الخدمات الحرفية<br>
+        • إمكانية التفاوض على أسعار بوابة مؤسسية مع النمو
+      </td>
+      <td>
+        • دخول لاعب كبير مدعوم (بنك أو شركة مدفوعات) بنفس الفكرة<br>
+        • تشدد تنظيمي جديد من البنك المركزي على نماذج الوساطة<br>
+        • موجة نزاعات/احتيال منظم تستنزف الهامش والسمعة<br>
+        • تشكيك المستخدمين: "ومين يضمن المنصة نفسها؟"<br>
+        • المنافسون الحاليون قد يسبقون في الانتشار باستثمار كبير
+      </td>
+    </tr>
+  </table>
+  </div>
+</section>
+
+<!-- ============ 11. Risks ============ -->
+<section id="s11">
+  <h2>1️⃣1️⃣ المخاطر وخطط التخفيف</h2>
+  <div class="table-wrap">
+  <table>
+    <tr><th>الخطر</th><th>الاحتمال</th><th>الأثر</th><th>خطة التخفيف</th></tr>
+    <tr><td>ملاحقة تنظيمية باعتبار النشاط "خدمة دفع غير مرخّصة"</td><td><span class="tag mid">متوسط</span></td><td><span class="tag high">قاتل</span></td><td>هيكل شراكة مع مرخّص من اليوم الأول + استشارة محامي FinTech قبل الإطلاق + تواصل استباقي مع الجهات</td></tr>
+    <tr><td>احتيال منظم على آلية النزاعات (أدلة مزورة)</td><td><span class="tag high">مرتفع</span></td><td><span class="tag mid">متوسط</span></td><td>حدود مبالغ للحسابات الجديدة، تصعيد KYC تدريجي، كشف أنماط (نفس الجهاز/الIP لطرفين)، تأخير التحرير للحسابات منخفضة السمعة</td></tr>
+    <tr><td>هامش ربح لا يغطي التشغيل</td><td><span class="tag mid">متوسط</span></td><td><span class="tag high">مرتفع</span></td><td>التركيز على العمليات الصغيرة عالية الهامش، أتمتة ما يمكن من التسويات، إيرادات إضافية (اشتراكات بائعين)</td></tr>
+    <tr><td>فشل بناء الثقة الأولى ("مين يضمنكم انتوا؟")</td><td><span class="tag high">مرتفع</span></td><td><span class="tag high">مرتفع</span></td><td>إطلاق تدريجي عبر مجتمعات محددة، شفافية كاملة (أين تُحفظ الأموال ومع مَن)، شراكة مع كيان بنكي معروف كداعم ظاهر</td></tr>
+    <tr><td>دخول منافس كبير ممول</td><td><span class="tag mid">متوسط</span></td><td><span class="tag mid">متوسط</span></td><td>السرعة + التخصص في شريحة الخدمات الرقمية + بناء أثر شبكي بالسمعة قبل وصوله</td></tr>
+    <tr><td>تسريب بيانات مستخدمين</td><td><span class="tag low">منخفض (مع ضوابط)</span></td><td><span class="tag high">مرتفع</span></td><td>عدم تخزين بيانات البطاقات إطلاقاً، تشفير، اختبار اختراق دوري، امتثال قانون 151/2020</td></tr>
+  </table>
+  </div>
+</section>
+
+<!-- ============ 12. Roadmap ============ -->
+<section id="s12">
+  <h2>1️⃣2️⃣ خارطة الطريق وخطة التنفيذ (MVP)</h2>
+
+  <div class="flow">
+    <div class="step">
+      <div class="num">1</div>
+      <div class="body"><b>المرحلة صفر — التأسيس القانوني (شهر 1–2):</b> استشارة محامي FinTech، اختيار الشريك المرخّص (Paymob أو بنك)، توقيع اتفاقية الوكالة/الشراكة، تأسيس الكيان القانوني، صياغة الشروط والأحكام وآلية التسوية.</div>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <div class="body"><b>MVP — النسخة الأولى (شهر 2–5):</b> إنشاء عملية + دعوة برابط، دفع عبر البوابة، تجميد وتحرير يدوي شبه كامل من لوحة داخلية (Admin)، تسوية نزاعات يدوية 100%، تقييمات أساسية. <b>بدون تطبيق موبايل</b> — Web App متجاوب يكفي.</div>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <div class="body"><b>الإطلاق المغلق (شهر 5–7):</b> إطلاق تجريبي في 2–3 جروبات فيسبوك نشطة (بيع اشتراكات/خدمات رقمية)، هدف: 500 عملية حقيقية. قياس: معدل النزاعات، زمن التسوية، رضا الطرفين، تكرار الاستخدام.</div>
+    </div>
+    <div class="step">
+      <div class="num">4</div>
+      <div class="body"><b>التكرار والتحسين (شهر 7–10):</b> أتمتة التحرير التلقائي بعد المهلة، تحسين لوحة النزاعات بناءً على الحالات الحقيقية، إضافة إثباتات تسليم منظمة، تطبيق موبايل إذا أثبتت الأرقام جدواه.</div>
+    </div>
+    <div class="step">
+      <div class="num">5</div>
+      <div class="body"><b>التوسع (شهر 10+):</b> فتح التسجيل العام، حملات لاستقطاب البائعين على صفحات فيسبوك ("اعرض الضمان كميزة بيع")، التفاوض على تسعير مؤسسي مع البوابة، دراسة الترخيص المباشر أو جولة استثمارية.</div>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <strong>مبدأ الإطلاق</strong>
+    كما ورد في النقاش الداخلي: "الواحد يعمل منصة سهلة من البداية، ساعتها غالباً هياكل السوق". الترجمة التنفيذية: <b>ابدأ صغيراً ويدوياً ومتعمداً</b> — لا تبنِ نظام تسوية نزاعات آلي معقد قبل أن ترى أول 100 نزاع حقيقي بعينيك.
+  </div>
+
+  <h3>مؤشرات النجاح (KPIs) للنسخة الأولى</h3>
+  <ul>
+    <li>عدد العمليات الشهرية وقيمتها الإجمالية (GMV)</li>
+    <li>معدل النزاعات (الهدف: أقل من 5% من العمليات)</li>
+    <li>متوسط زمن حل النزاع (الهدف: أقل من 72 ساعة)</li>
+    <li>معدل تكرار الاستخدام (عملية ثانية لنفس المستخدم خلال 60 يوماً)</li>
+    <li>صافي الهامش لكل عملية بعد رسوم البوابة</li>
+  </ul>
+</section>
+
+<!-- ============ 13. Conclusion ============ -->
+<section id="s13">
+  <h2>1️⃣3️⃣ الخلاصة والتوصيات</h2>
+
+  <div class="callout info">
+    <strong>الحكم النهائي للدراسة</strong>
+    المشروع <b>قابل للتنفيذ ويستحق التجربة</b> — بشرط تصحيح ثلاث فرضيات في النقاش الأصلي، والمضي بالطريق التنظيمي الصحيح من اليوم الأول.
+  </div>
+
+  <h3>تصحيح الفرضيات</h3>
+  <ol>
+    <li><b>"محدش منفذها":</b> غير دقيقة — Pay Confirmed وEscrow Pay منفذان فعلاً في مصر بنفس الفكرة تماماً، وWaffy App في السعودية تنفّذ نموذجاً مطابقاً إقليمياً. الميزة ليست في جِدة الفكرة بل في أن <b>لا أحد امتلك السوق الجماهيري بعد</b> — خصوصاً مستخدم فيسبوك العادي.</li>
+    <li><b>"هتنافس إنستاباي بالعمولة":</b> معركة خاسرة مسبقاً — إنستاباي شبه مجاني. المنتج المُباع هو <b>الضمان لا التحويل</b>. سعّر الضمان بقيمته (3–5%) ولا تدخل حرب أسعار.</li>
+    <li><b>"العمولة الأقل هياكل السوق":</b> الهامش أصلاً رفيع (رسوم البوابة ~2.75%+3 ج). النزول تحت 4% يعني العمل بهامش شبه معدوم أول موجة نزاعات تلتهمه.</li>
+  </ol>
+
+  <h3>التوصيات الخمس</h3>
+  <ul>
+    <li><b>قانوني أولاً:</b> لا تكتب سطر كود واحد قبل جلسة مع محامي FinTech واتفاق مبدئي مع شريك مرخّص — هذا بند "قاتل للمشروع" إن أُهمل.</li>
+    <li><b>ابدأ بالخدمات الرقمية والاشتراكات:</b> أسرع دورة عملية، أسهل تحقق، وأقل منافسة متخصصة.</li>
+    <li><b>اجعل البائع مندوبك التسويقي:</b> الضمان أداة إقناع يستخدمها البائع الجاد مع عملائه — صمّم الرسائل والروابط لتخدم هذا السلوك.</li>
+    <li><b>أدِر النزاعات يدوياً في البداية وتعلّم منها:</b> فريق التسوية ليس عبئاً — هو المنتج الحقيقي. كل نزاع تعلّمه يتحول لقاعدة أتمتة لاحقاً.</li>
+    <li><b>قِس كل شيء من اليوم الأول:</b> معدل النزاعات وزمن حلها هما اللذان يحددان بقاء المشروع — قبل عدد المستخدمين نفسه.</li>
+  </ul>
+
+  <div class="callout success">
+    <strong>الخلاصة في سطر</strong>
+    الفكرة موجودة لكن السوق مفتوح، والمشكلة حقيقية، والبنية التحتية جاهزة — الفائز سيكون من ينفّذ <b>أسهل تجربة + أثبت ضمان + أذكى هيكل قانوني</b>، لا من فكر في الفكرة أولاً.
+  </div>
+</section>
+
+</div>
+
+<footer>
+  دراسة جدوى أولية — مشروع منصة وسيط ضمان للمدفوعات (Escrow) في مصر<br>
+  أُعدت لأغراض التقييم الداخلي بالاستناد لنقاش الفريق وبحث في السوق المصري والإقليمي (المنافسون، لوائح البنك المركزي المصري 2025)<br>
+  لا تغني عن استشارة قانونية ومالية متخصصة قبل أي قرار تنفيذي — أغسطس 2026
+</footer>
+
+<script>
+  var sections = document.querySelectorAll('section');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+    sections.forEach(function(s){ io.observe(s); });
+  } else {
+    sections.forEach(function(s){ s.classList.add('is-visible'); });
+  }
+</script>
+</body>
+</html>
